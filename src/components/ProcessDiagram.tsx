@@ -1,6 +1,20 @@
 import type { ReactNode } from 'react'
 
-function PromptIcon() {
+function ThinkIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M9 18H15M10 21H14M8.5 14.5C6.567 13.278 5.5 11.402 5.5 9.5C5.5 6.18629 8.18629 3.5 12 3.5C15.8137 3.5 18.5 6.18629 18.5 9.5C18.5 11.402 17.433 13.278 15.5 14.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function PromptScriptIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
       <path
@@ -10,29 +24,9 @@ function PromptIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M8 8.5H16M8 11.5H13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function ScriptIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M8.5 8L4.5 12L8.5 16"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15.5 8L19.5 12L15.5 16"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M13.5 5.5L10.5 18.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M8.5 8.5L6.8 10L8.5 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15.5 8.5L17.2 10L15.5 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M13 8L11 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }
@@ -88,11 +82,11 @@ export function ProcessDiagram() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:gap-2">
-        <Step icon={<PromptIcon />} title="Prompt" caption="Ask AI to write the script" />
+        <Step icon={<ThinkIcon />} title="Think" caption="Spot what's actually repeatable" />
         <ArrowConnector />
-        <Step icon={<ScriptIcon />} title="Script" caption="Deterministic, reviewable code" />
+        <Step icon={<PromptScriptIcon />} title="Prompt the script" caption="One prompt, a reusable script" />
         <ArrowConnector />
-        <Step icon={<RunIcon />} title="Run" caption="Fast, free, exactly repeatable" />
+        <Step icon={<RunIcon />} title="Run" caption="Free, instant, identical every time" />
       </div>
 
       <div className="flex items-center gap-4 rounded-xl border border-brand-soft bg-brand-soft px-5 py-4">
@@ -101,8 +95,7 @@ export function ProcessDiagram() {
         </div>
         <div className="text-[14px] leading-snug text-ink-soft">
           <span className="font-semibold text-ink">Still prompt for the rest: </span>
-          judgment calls, one-off requests, and anything too ambiguous to reduce to a rule. That's where AI earns its
-          keep — scripting the repeatable part just frees it up for that.
+          the judgment calls, one-offs, and anything too fuzzy to reduce to a rule.
         </div>
       </div>
     </div>

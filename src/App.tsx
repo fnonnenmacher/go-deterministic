@@ -24,14 +24,14 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <div className="flex flex-1 flex-col items-center px-6 py-16">
+      <div className="flex flex-col items-center px-6 pt-16 pb-14">
         <div className="flex w-full max-w-[860px] flex-col gap-10">
           <Header />
           <PromptView segments={segments} />
           <BetterList segments={segments} />
-          <Explanation />
         </div>
       </div>
+      <Explanation />
       <BookFooter />
     </div>
   )
