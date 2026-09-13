@@ -1,5 +1,6 @@
 import type { PromptSegment } from '../parsePrompt'
 import { extractCorrections } from '../parsePrompt'
+import { renderInlineMarkdown } from '../markdown'
 
 export function BetterList({ segments }: { segments: PromptSegment[] }) {
   const corrections = extractCorrections(segments)
@@ -19,7 +20,7 @@ export function BetterList({ segments }: { segments: PromptSegment[] }) {
                 {c.index}
               </span>
               <div className="flex flex-col gap-2">
-                <div className="text-[15px] leading-relaxed">{c.comment}</div>
+                <div className="text-[15px] leading-relaxed">{renderInlineMarkdown(c.comment)}</div>
               </div>
             </div>
           </div>

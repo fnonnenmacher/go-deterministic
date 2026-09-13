@@ -10,7 +10,7 @@ const DEFAULT_PROMPT =
   'Please open the file config.json and ' +
   '[replace all double quotes with single quotes]' +
   '{This is a simple find-and-replace — a one-line sed command is faster and 100% reliable, ' +
-  'no need to ask an LLM: sed -i \'\' "s/\\"/\'/g" config.json} ' +
+  'no need to ask an LLM: `sed -i \'\' "s/\\"/\'/g" config.json`} ' +
   'then save it.'
 
 function getPromptFromUrl(): string | null {
