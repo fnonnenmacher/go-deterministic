@@ -23,14 +23,16 @@ function App() {
   const segments = useMemo(() => parsePrompt(prompt), [prompt])
 
   return (
-    <div className="flex min-h-screen flex-col items-center px-6 py-16 pb-24">
-      <div className="flex w-full max-w-[860px] flex-col gap-10">
-        <Header />
-        <PromptView segments={segments} />
-        <BetterList segments={segments} />
-        <Explanation />
-        <BookFooter />
+    <div className="flex min-h-screen flex-col">
+      <div className="flex flex-1 flex-col items-center px-6 py-16">
+        <div className="flex w-full max-w-[860px] flex-col gap-10">
+          <Header />
+          <PromptView segments={segments} />
+          <BetterList segments={segments} />
+          <Explanation />
+        </div>
       </div>
+      <BookFooter />
     </div>
   )
 }
