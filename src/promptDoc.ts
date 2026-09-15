@@ -99,10 +99,13 @@ export function stringifyDoc(doc: PromptDoc): string {
   return `${doc.prompt}\n---\n${blocks}`
 }
 
+// Produces a raw base64 string (no percent-encoding). Callers that splice this
+// directly into a URL string (rather than through URLSearchParams, which does
+// its own percent-encoding) must wrap the result in encodeURIComponent themselves.
 export function encodeDoc(text: string): string {
-  return encodeURIComponent(btoa(unescape(encodeURIComponent(text))))
+  return btoa(unescape(encodeURIComponent(text)))
 }
 
 export function decodeDoc(encoded: string): string {
-  return decodeURIComponent(escape(atob(decodeURIComponent(encoded))))
+  return decodeURIComponent(escape(atob(encoded)))
 }

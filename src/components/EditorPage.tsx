@@ -72,10 +72,10 @@ export function EditorPage() {
           <Header />
 
           <div className="flex flex-col gap-2">
-            <div className="text-2xl font-bold tracking-tight">Build a prompt walkthrough</div>
+            <div className="text-2xl font-bold tracking-tight">Show someone how to improve their prompt</div>
             <div className="max-w-2xl text-[15px] leading-relaxed text-ink-soft">
-              Write the prompt, then point out what could be improved about it. Share the link so the
-              next person sees exactly what you saw.
+              Paste their prompt, then point out what you'd change. Share the link so they can see
+              exactly what you mean.
             </div>
           </div>
 

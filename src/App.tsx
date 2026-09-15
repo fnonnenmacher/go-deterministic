@@ -43,7 +43,7 @@ function ImproveCta({ href }: { href: string }) {
       href={href}
       className="shrink-0 rounded-[9px] bg-brand px-4 py-2.5 text-[13.5px] font-semibold whitespace-nowrap text-white hover:opacity-90"
     >
-      Build a walkthrough →
+      Show how to improve a prompt →
     </a>
   )
 }
@@ -53,7 +53,7 @@ function Home() {
   const segments = useMemo(() => parsePrompt(prompt), [prompt])
   const walkthroughHref = useMemo(() => {
     const text = stringifyDoc(segmentsToDoc(segments))
-    return `?doc=${encodeDoc(text)}#editor`
+    return `?doc=${encodeURIComponent(encodeDoc(text))}#editor`
   }, [segments])
 
   return (
