@@ -9,11 +9,16 @@ import { parsePrompt } from './parsePrompt'
 import { encodeDoc, segmentsToDoc, stringifyDoc } from './promptDoc'
 
 const DEFAULT_PROMPT =
-  'Please open the file config.json and ' +
+  'Open the project config.json and ' +
   '[replace all double quotes with single quotes]' +
   '{This is a simple find-and-replace — a one-line sed command is faster and 100% reliable, ' +
-  'no need to ask an LLM: `sed -i \'\' "s/\\"/\'/g" config.json`} ' +
-  'then save it.'
+  'no need to ask an LLM: `sed -i \'\' "s/\\"/\'/g" config.json`}, ' +
+  'then [count how many lines across every file in ./logs mention ERROR]' +
+  '{Grepping is deterministic and instant — no need to have an LLM read every log line: ' +
+  '`grep -rho ERROR ./logs | wc -l`}, ' +
+  'and finally [rename every file in ./exports that starts with tmp_ to start with final_ instead]' +
+  '{This is a fixed rule, not a judgment call — one rename command handles it the same way every ' +
+  'time: `rename \'s/^tmp_/final_/\' ./exports/tmp_*`}.'
 
 function getPromptFromUrl(): string | null {
   const params = new URLSearchParams(window.location.search)

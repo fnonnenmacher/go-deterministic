@@ -1,6 +1,6 @@
 export function Header() {
   return (
-    <a href="." className="flex items-center gap-3.5 text-ink no-underline">
+    <a href={import.meta.env.BASE_URL} className="flex items-center gap-3.5 text-ink no-underline">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-ink">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path

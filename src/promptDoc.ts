@@ -10,10 +10,14 @@ export interface PromptDoc {
   improvements: Improvement[]
 }
 
-export const TEMPLATE_TEXT = `Please open the file config.json and replace all double quotes with single quotes then save it.
+export const TEMPLATE_TEXT = `Open the project config.json and replace all double quotes with single quotes, then count how many lines across every file in ./logs mention ERROR, and finally rename every file in ./exports that starts with tmp_ to start with final_ instead.
 ---
 [replace all double quotes with single quotes]
-This is a simple find-and-replace — a one-line sed command is faster and 100% reliable, no need to ask an LLM: \`sed -i '' "s/\\"/'/g" config.json\``
+This is a simple find-and-replace — a one-line sed command is faster and 100% reliable, no need to ask an LLM: \`sed -i '' "s/\\"/'/g" config.json\`
+[count how many lines across every file in ./logs mention ERROR]
+Grepping is deterministic and instant — no need to have an LLM read every log line: \`grep -rho ERROR ./logs | wc -l\`
+[rename every file in ./exports that starts with tmp_ to start with final_ instead]
+This is a fixed rule, not a judgment call — one rename command handles it the same way every time: \`rename 's/^tmp_/final_/' ./exports/tmp_*\``
 
 const SEPARATOR_RE = /\n-{3,}\n/
 const MARKER_RE = /^\s*\[(.+)\]\s*$/
