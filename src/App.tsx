@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Header } from './components/Header'
 import { PromptView } from './components/PromptView'
 import { BetterList } from './components/BetterList'
 import { Explanation } from './components/Explanation'
 import { BookFooter } from './components/BookFooter'
-import { EditorPage } from './components/EditorPage'
 import { parsePrompt } from './parsePrompt'
 import { encodeDoc, segmentsToDoc, stringifyDoc } from './promptDoc'
 
@@ -25,18 +24,6 @@ function getPromptFromUrl(): string | null {
   return params.get('p')
 }
 
-function useHash(): string {
-  const [hash, setHash] = useState(() => window.location.hash)
-
-  useEffect(() => {
-    const onHashChange = () => setHash(window.location.hash)
-    window.addEventListener('hashchange', onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
-  }, [])
-
-  return hash
-}
-
 function ImproveCta({ href }: { href: string }) {
   return (
     <a
@@ -48,12 +35,12 @@ function ImproveCta({ href }: { href: string }) {
   )
 }
 
-function Home() {
+function App() {
   const prompt = useMemo(() => getPromptFromUrl() ?? DEFAULT_PROMPT, [])
   const segments = useMemo(() => parsePrompt(prompt), [prompt])
   const walkthroughHref = useMemo(() => {
     const text = stringifyDoc(segmentsToDoc(segments))
-    return `?doc=${encodeURIComponent(encodeDoc(text))}#editor`
+    return `${import.meta.env.BASE_URL}edit/?doc=${encodeURIComponent(encodeDoc(text))}`
   }, [segments])
 
   return (
@@ -72,11 +59,6 @@ function Home() {
       <BookFooter />
     </div>
   )
-}
-
-function App() {
-  const hash = useHash()
-  return hash.startsWith('#editor') ? <EditorPage /> : <Home />
 }
 
 export default App

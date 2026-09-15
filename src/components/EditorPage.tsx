@@ -60,7 +60,6 @@ export function EditorPage() {
 
   const shareUrl = useMemo(() => {
     const url = new URL(window.location.href)
-    url.hash = 'editor'
     url.searchParams.set('doc', encodeDoc(source))
     return url.toString()
   }, [source])
