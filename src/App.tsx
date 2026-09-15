@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Header } from './components/Header'
 import { PromptView } from './components/PromptView'
 import { BetterList } from './components/BetterList'
 import { Explanation } from './components/Explanation'
 import { BookFooter } from './components/BookFooter'
+import { EditorPage } from './components/EditorPage'
 import { parsePrompt } from './parsePrompt'
 
 const DEFAULT_PROMPT =
@@ -18,7 +19,30 @@ function getPromptFromUrl(): string | null {
   return params.get('p')
 }
 
-function App() {
+function useHash(): string {
+  const [hash, setHash] = useState(() => window.location.hash)
+
+  useEffect(() => {
+    const onHashChange = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  return hash
+}
+
+function ImproveCta() {
+  return (
+    <a
+      href="#editor"
+      className="shrink-0 rounded-[9px] bg-brand px-4 py-2.5 text-[13.5px] font-semibold whitespace-nowrap text-white hover:opacity-90"
+    >
+      Build a walkthrough →
+    </a>
+  )
+}
+
+function Home() {
   const prompt = useMemo(() => getPromptFromUrl() ?? DEFAULT_PROMPT, [])
   const segments = useMemo(() => parsePrompt(prompt), [prompt])
 
@@ -26,7 +50,10 @@ function App() {
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-col items-center px-6 pt-16 pb-14">
         <div className="flex w-full max-w-[860px] flex-col gap-10">
-          <Header />
+          <div className="flex items-start justify-between gap-4">
+            <Header />
+            <ImproveCta />
+          </div>
           <PromptView segments={segments} />
           <BetterList segments={segments} />
         </div>
@@ -35,6 +62,11 @@ function App() {
       <BookFooter />
     </div>
   )
+}
+
+function App() {
+  const hash = useHash()
+  return hash.startsWith('#editor') ? <EditorPage /> : <Home />
 }
 
 export default App

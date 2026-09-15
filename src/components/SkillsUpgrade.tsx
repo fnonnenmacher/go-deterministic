@@ -50,8 +50,6 @@ function UpgradeCard({
   )
 }
 
-const BOOK_URL = 'https://learning.oreilly.com/library/view/building-ai-agent/0642572243906/'
-
 export function SkillsUpgrade() {
   return (
     <div className="flex flex-col gap-5 border-l-4 border-brand pl-5">
