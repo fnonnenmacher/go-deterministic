@@ -93,6 +93,26 @@ export function segmentsToDoc(segments: PromptSegment[]): PromptDoc {
   return { prompt, improvements }
 }
 
+// Reconstructs the "[marked]{comment}" inline format that the homepage's `?p=`
+// param and parsePrompt() understand, so a doc built in the editor can be
+// shared as a homepage link instead of an editor link.
+export function toInlineFormat(doc: PromptDoc): string {
+  let result = ''
+  let cursor = 0
+
+  for (const { marked, comment } of doc.improvements) {
+    const start = doc.prompt.indexOf(marked, cursor)
+    if (start === -1) continue
+
+    result += doc.prompt.slice(cursor, start)
+    result += `[${marked}]{${comment}}`
+    cursor = start + marked.length
+  }
+
+  result += doc.prompt.slice(cursor)
+  return result
+}
+
 export function stringifyDoc(doc: PromptDoc): string {
   if (doc.improvements.length === 0) return doc.prompt
   const blocks = doc.improvements.map((i) => `[${i.marked}]\n${i.comment}`).join('\n')

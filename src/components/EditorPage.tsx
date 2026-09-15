@@ -3,7 +3,7 @@ import { Header } from './Header'
 import { PromptView } from './PromptView'
 import { BetterList } from './BetterList'
 import { BookFooter } from './BookFooter'
-import { parseDoc, toSegments, encodeDoc, decodeDoc, TEMPLATE_TEXT } from '../promptDoc'
+import { parseDoc, toSegments, toInlineFormat, decodeDoc, TEMPLATE_TEXT } from '../promptDoc'
 
 function buildAgentPrompt(promptText: string): string {
   return `Read the prompt below and suggest specific improvements to it — places where a
@@ -59,10 +59,10 @@ export function EditorPage() {
   const agentPrompt = useMemo(() => buildAgentPrompt(doc.prompt), [doc.prompt])
 
   const shareUrl = useMemo(() => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('doc', encodeDoc(source))
+    const url = new URL(import.meta.env.BASE_URL, window.location.origin)
+    url.searchParams.set('p', toInlineFormat(doc))
     return url.toString()
-  }, [source])
+  }, [doc])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -73,8 +73,8 @@ export function EditorPage() {
           <div className="flex flex-col gap-2">
             <div className="text-2xl font-bold tracking-tight">Show someone how to improve their prompt</div>
             <div className="max-w-2xl text-[15px] leading-relaxed text-ink-soft">
-              Paste their prompt, then point out what you'd change. Share the link so they can see
-              exactly what you mean.
+              Paste their prompt, then point out what you'd change. The link opens the demo with
+              your notes already on it — this editor is just how you get there.
             </div>
           </div>
 
