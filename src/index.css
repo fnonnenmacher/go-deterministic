@@ -16,6 +16,21 @@
   --color-red-soft: oklch(0.95 0.03 24);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #16140f;
+    --color-card: #201d18;
+    --color-border: #3a352c;
+    --color-ink: #f2efe8;
+    --color-ink-soft: #b8b0a1;
+    --color-ink-faint: #7a7365;
+    --color-brand: oklch(0.6 0.15 264);
+    --color-brand-soft: oklch(0.27 0.05 264);
+    --color-red: oklch(0.6 0.18 24);
+    --color-red-soft: oklch(0.27 0.07 24);
+  }
+}
+
 body {
   margin: 0;
   background: var(--color-bg);

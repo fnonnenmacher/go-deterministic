@@ -4,7 +4,7 @@ const BOOK_URL = 'https://learning.oreilly.com/library/view/building-ai-agent/06
 
 export function BookFooter() {
   return (
-    <div className="w-full bg-ink">
+    <div className="w-full bg-[#211f1c]">
       <div className="mx-auto flex w-full max-w-[860px] flex-col items-center gap-6 px-6 py-12 text-center sm:flex-row sm:text-left">
         <a href={BOOK_URL} target="_blank" rel="noopener noreferrer" className="shrink-0">
           <img
@@ -34,7 +34,7 @@ export function BookFooter() {
           href={BOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 rounded-[9px] bg-[#faf9f7] px-[18px] py-2.5 text-[13.5px] font-semibold whitespace-nowrap text-ink"
+          className="shrink-0 rounded-[9px] bg-[#faf9f7] px-[18px] py-2.5 text-[13.5px] font-semibold whitespace-nowrap text-[#211f1c]"
         >
           Get the book
         </a>
