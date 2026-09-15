@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Header } from './Header'
 import { PromptView } from './PromptView'
 import { BetterList } from './BetterList'
+import { BookFooter } from './BookFooter'
 import { parseDoc, toSegments, encodeDoc, decodeDoc, TEMPLATE_TEXT } from '../promptDoc'
 
 function buildAgentPrompt(promptText: string): string {
@@ -68,12 +69,7 @@ export function EditorPage() {
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-col items-center px-6 pt-16 pb-14">
         <div className="flex w-full max-w-[860px] flex-col gap-10">
-          <div className="flex flex-col gap-4">
-            <Header />
-            <a href="." className="text-sm text-ink-soft hover:text-brand">
-              ← Back to the example
-            </a>
-          </div>
+          <Header />
 
           <div className="flex flex-col gap-2">
             <div className="text-2xl font-bold tracking-tight">Build a prompt walkthrough</div>
@@ -83,21 +79,21 @@ export function EditorPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 rounded-xl border-2 border-brand bg-brand-soft px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0 flex-1 truncate font-mono text-[13px] text-ink-soft">{shareUrl}</div>
-            <CopyButton text={shareUrl} label="Copy link to share" />
-          </div>
-
           <div className="flex flex-col gap-3">
             <label className="text-xs font-semibold tracking-wide text-ink-soft uppercase">
               Your prompt, then the improvements
             </label>
-            <textarea
-              value={source}
-              onChange={(e) => setSource(e.target.value)}
-              spellCheck={false}
-              className="min-h-[240px] rounded-2xl border border-border bg-card px-6 py-5 font-mono text-[13.5px] leading-relaxed text-ink outline-none focus:border-brand"
-            />
+            <div className="relative">
+              <textarea
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+                spellCheck={false}
+                className="min-h-[240px] w-full rounded-2xl border border-border bg-card px-6 py-5 pr-[9.5rem] font-mono text-[13.5px] leading-relaxed text-ink outline-none focus:border-brand"
+              />
+              <div className="absolute top-4 right-4">
+                <CopyButton text={shareUrl} label="Copy link" />
+              </div>
+            </div>
             <div className="text-[13px] leading-relaxed text-ink-faint">
               Just a prompt is fine on its own. To flag an improvement, add a line below{' '}
               <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">---</code> with the
@@ -128,6 +124,7 @@ export function EditorPage() {
           </div>
         </div>
       </div>
+      <BookFooter />
     </div>
   )
 }

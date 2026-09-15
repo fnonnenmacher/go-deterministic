@@ -6,6 +6,7 @@ import { Explanation } from './components/Explanation'
 import { BookFooter } from './components/BookFooter'
 import { EditorPage } from './components/EditorPage'
 import { parsePrompt } from './parsePrompt'
+import { encodeDoc, segmentsToDoc, stringifyDoc } from './promptDoc'
 
 const DEFAULT_PROMPT =
   'Please open the file config.json and ' +
@@ -31,10 +32,10 @@ function useHash(): string {
   return hash
 }
 
-function ImproveCta() {
+function ImproveCta({ href }: { href: string }) {
   return (
     <a
-      href="#editor"
+      href={href}
       className="shrink-0 rounded-[9px] bg-brand px-4 py-2.5 text-[13.5px] font-semibold whitespace-nowrap text-white hover:opacity-90"
     >
       Build a walkthrough →
@@ -45,6 +46,10 @@ function ImproveCta() {
 function Home() {
   const prompt = useMemo(() => getPromptFromUrl() ?? DEFAULT_PROMPT, [])
   const segments = useMemo(() => parsePrompt(prompt), [prompt])
+  const walkthroughHref = useMemo(() => {
+    const text = stringifyDoc(segmentsToDoc(segments))
+    return `?doc=${encodeDoc(text)}#editor`
+  }, [segments])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -52,7 +57,7 @@ function Home() {
         <div className="flex w-full max-w-[860px] flex-col gap-10">
           <div className="flex items-start justify-between gap-4">
             <Header />
-            <ImproveCta />
+            <ImproveCta href={walkthroughHref} />
           </div>
           <PromptView segments={segments} />
           <BetterList segments={segments} />

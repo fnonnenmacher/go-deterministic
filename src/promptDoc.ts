@@ -73,6 +73,28 @@ export function toSegments(doc: PromptDoc): PromptSegment[] {
   return segments
 }
 
+export function segmentsToDoc(segments: PromptSegment[]): PromptDoc {
+  let prompt = ''
+  const improvements: Improvement[] = []
+
+  for (const segment of segments) {
+    if (segment.type === 'text') {
+      prompt += segment.value
+    } else {
+      prompt += segment.marked
+      improvements.push({ marked: segment.marked, comment: segment.comment })
+    }
+  }
+
+  return { prompt, improvements }
+}
+
+export function stringifyDoc(doc: PromptDoc): string {
+  if (doc.improvements.length === 0) return doc.prompt
+  const blocks = doc.improvements.map((i) => `[${i.marked}]\n${i.comment}`).join('\n')
+  return `${doc.prompt}\n---\n${blocks}`
+}
+
 export function encodeDoc(text: string): string {
   return encodeURIComponent(btoa(unescape(encodeURIComponent(text))))
 }

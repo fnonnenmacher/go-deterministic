@@ -1,6 +1,6 @@
 export function Header() {
   return (
-    <div className="flex items-center gap-3.5">
+    <a href="." className="flex items-center gap-3.5 text-ink no-underline">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-ink">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
@@ -19,6 +19,6 @@ export function Header() {
         </div>
         <div className="mt-0.5 text-sm text-ink-soft">Know when a script beats a prompt.</div>
       </div>
-    </div>
+    </a>
   )
 }
