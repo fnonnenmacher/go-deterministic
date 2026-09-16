@@ -56,8 +56,9 @@ export function LocalGenerator({
       // site (static GitHub Pages hosting) doesn't set those, and without them
       // onnxruntime-web's session creation fails with std::bad_alloc rather
       // than a clear error. Force single-threaded WASM, which needs neither.
-      env.backends.onnx.wasm ??= {}
-      env.backends.onnx.wasm.numThreads = 1
+      if (env.backends.onnx.wasm) {
+        env.backends.onnx.wasm.numThreads = 1
+      }
 
       // WASM+q4 is the combination transformers.js is most tested against, so
       // try it first. If it still can't allocate a session, fall back to
