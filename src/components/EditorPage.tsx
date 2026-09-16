@@ -4,6 +4,7 @@ import { PromptView } from './PromptView'
 import { BetterList } from './BetterList'
 import { BookFooter } from './BookFooter'
 import { HighlightedTextarea } from './HighlightedTextarea'
+import { LocalGenerator } from './LocalGenerator'
 import {
   parseDoc,
   parseImprovements,
@@ -142,6 +143,7 @@ export function EditorPage() {
               </pre>
               <CopyButton text={agentPrompt} label="Copy" />
             </div>
+            <LocalGenerator agentInstruction={agentPrompt} onResult={setImprovementsText} />
           </div>
         </div>
       </div>
