@@ -61,6 +61,24 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   )
 }
 
+function ShareButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        navigator.clipboard.writeText(text)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1500)
+      }}
+      className="self-start rounded-[9px] bg-brand px-5 py-3 text-[14px] font-semibold text-white hover:opacity-90"
+    >
+      {copied ? 'Link copied!' : 'Copy shareable link →'}
+    </button>
+  )
+}
+
 export function EditorPage() {
   const initialDoc = useMemo(getInitialDoc, [])
   const [promptText, setPromptText] = useState(initialDoc.prompt)
@@ -112,16 +130,12 @@ export function EditorPage() {
                 Generate improvements with an LLM ↓
               </a>
             </div>
-            <div className="relative">
-              <HighlightedTextarea value={improvementsText} onChange={setImprovementsText} />
-              <div className="absolute top-4 right-4">
-                <CopyButton text={shareUrl} label="Copy link" />
-              </div>
-            </div>
+            <HighlightedTextarea value={improvementsText} onChange={setImprovementsText} />
             <div className="text-[13px] leading-relaxed text-ink-faint">
               Put the exact text from the prompt in <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">[brackets]</code>{' '}
               on its own line, followed by your comment. Leave this empty if the prompt is fine as is.
             </div>
+            <ShareButton text={shareUrl} />
           </div>
 
           <div className="flex flex-col gap-10">
