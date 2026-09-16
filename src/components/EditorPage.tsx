@@ -3,7 +3,16 @@ import { Header } from './Header'
 import { PromptView } from './PromptView'
 import { BetterList } from './BetterList'
 import { BookFooter } from './BookFooter'
-import { parseDoc, toSegments, toInlineFormat, decodeDoc, TEMPLATE_TEXT } from '../promptDoc'
+import { HighlightedTextarea } from './HighlightedTextarea'
+import {
+  parseDoc,
+  parseImprovements,
+  stringifyImprovements,
+  toSegments,
+  toInlineFormat,
+  decodeDoc,
+  TEMPLATE_TEXT,
+} from '../promptDoc'
 
 function buildAgentPrompt(promptText: string): string {
   return `Read the prompt below and suggest specific improvements to it — places where a
@@ -22,14 +31,14 @@ then your comment on the line(s) after it. For example:
 <comment>`
 }
 
-function getInitialSource(): string {
+function getInitialDoc() {
   const params = new URLSearchParams(window.location.search)
   const doc = params.get('doc')
-  if (!doc) return TEMPLATE_TEXT
+  if (!doc) return parseDoc(TEMPLATE_TEXT)
   try {
-    return decodeDoc(doc)
+    return parseDoc(decodeDoc(doc))
   } catch {
-    return TEMPLATE_TEXT
+    return parseDoc(TEMPLATE_TEXT)
   }
 }
 
@@ -52,9 +61,14 @@ function CopyButton({ text, label }: { text: string; label: string }) {
 }
 
 export function EditorPage() {
-  const [source, setSource] = useState(getInitialSource)
+  const initialDoc = useMemo(getInitialDoc, [])
+  const [promptText, setPromptText] = useState(initialDoc.prompt)
+  const [improvementsText, setImprovementsText] = useState(() => stringifyImprovements(initialDoc.improvements))
 
-  const doc = useMemo(() => parseDoc(source), [source])
+  const doc = useMemo(
+    () => ({ prompt: promptText.trim(), improvements: parseImprovements(improvementsText) }),
+    [promptText, improvementsText],
+  )
   const segments = useMemo(() => toSegments(doc), [doc])
   const agentPrompt = useMemo(() => buildAgentPrompt(doc.prompt), [doc.prompt])
 
@@ -79,25 +93,33 @@ export function EditorPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <label className="text-xs font-semibold tracking-wide text-ink-soft uppercase">
-              Your prompt, then the improvements
-            </label>
+            <label className="text-xs font-semibold tracking-wide text-ink-soft uppercase">Their prompt</label>
+            <textarea
+              value={promptText}
+              onChange={(e) => setPromptText(e.target.value)}
+              spellCheck={false}
+              className="min-h-[140px] w-full rounded-2xl border border-border bg-card px-6 py-5 font-mono text-[13.5px] leading-relaxed text-ink outline-none focus:border-brand"
+            />
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <label className="text-xs font-semibold tracking-wide text-ink-soft uppercase">
+                Your improvements
+              </label>
+              <a href="#agent-section" className="text-xs font-semibold text-brand hover:underline">
+                Generate improvements with an LLM ↓
+              </a>
+            </div>
             <div className="relative">
-              <textarea
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                spellCheck={false}
-                className="min-h-[240px] w-full rounded-2xl border border-border bg-card px-6 py-5 pr-[9.5rem] font-mono text-[13.5px] leading-relaxed text-ink outline-none focus:border-brand"
-              />
+              <HighlightedTextarea value={improvementsText} onChange={setImprovementsText} />
               <div className="absolute top-4 right-4">
                 <CopyButton text={shareUrl} label="Copy link" />
               </div>
             </div>
             <div className="text-[13px] leading-relaxed text-ink-faint">
-              Just a prompt is fine on its own. To flag an improvement, add a line below{' '}
-              <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">---</code> with the
-              exact text in <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">[brackets]</code>{' '}
-              followed by your comment.
+              Put the exact text from the prompt in <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">[brackets]</code>{' '}
+              on its own line, followed by your comment. Leave this empty if the prompt is fine as is.
             </div>
           </div>
 
@@ -106,13 +128,13 @@ export function EditorPage() {
             <BetterList segments={segments} />
           </div>
 
-          <div className="flex flex-col gap-3 border-l-4 border-brand pl-5">
+          <div id="agent-section" className="flex flex-col gap-3 border-l-4 border-brand pl-5 scroll-mt-10">
             <div className="text-xs font-semibold tracking-wider text-brand uppercase">
               Let a coding agent write it
             </div>
             <div className="max-w-2xl text-[14.5px] leading-relaxed text-ink-soft">
               Hand a coding agent your prompt and this instruction — it already includes what you've
-              written above — and paste what comes back under the <code className="rounded border border-border bg-bg px-1 py-0.5 text-[12px]">---</code>.
+              written above — and paste what comes back into the improvements box.
             </div>
             <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-5 py-4">
               <pre className="flex-1 overflow-x-auto font-mono text-[12.5px] leading-relaxed text-ink-soft whitespace-pre-wrap">

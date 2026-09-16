@@ -22,20 +22,11 @@ This is a fixed rule, not a judgment call — one rename command handles it the 
 const SEPARATOR_RE = /\n-{3,}\n/
 const MARKER_RE = /^\s*\[(.+)\]\s*$/
 
-export function parseDoc(text: string): PromptDoc {
-  const match = text.match(SEPARATOR_RE)
-
-  if (!match) {
-    return { prompt: text.trim(), improvements: [] }
-  }
-
-  const prompt = text.slice(0, match.index).trim()
-  const rest = text.slice((match.index ?? 0) + match[0].length)
-
+export function parseImprovements(text: string): Improvement[] {
   const improvements: Improvement[] = []
   let current: { marked: string; lines: string[] } | null = null
 
-  for (const line of rest.split('\n')) {
+  for (const line of text.split('\n')) {
     const markerMatch = line.match(MARKER_RE)
     if (markerMatch) {
       if (current) {
@@ -50,7 +41,20 @@ export function parseDoc(text: string): PromptDoc {
     improvements.push({ marked: current.marked, comment: current.lines.join('\n').trim() })
   }
 
-  return { prompt, improvements: improvements.filter((i) => i.marked && i.comment) }
+  return improvements.filter((i) => i.marked && i.comment)
+}
+
+export function parseDoc(text: string): PromptDoc {
+  const match = text.match(SEPARATOR_RE)
+
+  if (!match) {
+    return { prompt: text.trim(), improvements: [] }
+  }
+
+  const prompt = text.slice(0, match.index).trim()
+  const rest = text.slice((match.index ?? 0) + match[0].length)
+
+  return { prompt, improvements: parseImprovements(rest) }
 }
 
 export function toSegments(doc: PromptDoc): PromptSegment[] {
@@ -113,10 +117,13 @@ export function toInlineFormat(doc: PromptDoc): string {
   return result
 }
 
+export function stringifyImprovements(improvements: Improvement[]): string {
+  return improvements.map((i) => `[${i.marked}]\n${i.comment}`).join('\n')
+}
+
 export function stringifyDoc(doc: PromptDoc): string {
   if (doc.improvements.length === 0) return doc.prompt
-  const blocks = doc.improvements.map((i) => `[${i.marked}]\n${i.comment}`).join('\n')
-  return `${doc.prompt}\n---\n${blocks}`
+  return `${doc.prompt}\n---\n${stringifyImprovements(doc.improvements)}`
 }
 
 // Produces a raw base64 string (no percent-encoding). Callers that splice this
